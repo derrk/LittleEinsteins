@@ -21,10 +21,18 @@ public class Blastoff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Fly();
+        RocketMovement();
     }
 
-    private void Fly()
+    private void RocketMovement()
+    {
+
+        Thrusting();
+        Rotating(rotationThrust);
+
+    }
+
+    private void Thrusting()
     {
         if (Input.GetKey(KeyCode.Space))
         {
@@ -33,10 +41,17 @@ public class Blastoff : MonoBehaviour
                 myAudioSource.Play();
             }
             myRigidbody.AddRelativeForce(Vector3.up * mainThrust);
-        } else
+        }
+        else
         {
             myAudioSource.Stop();
         }
+    }
+
+    private void Rotating(float rotationThrust)
+    {
+        myRigidbody.freezeRotation = true;
+
         if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(-Vector3.forward * Time.deltaTime * rotationThrust);
@@ -46,5 +61,11 @@ public class Blastoff : MonoBehaviour
             transform.Rotate(Vector3.forward * Time.deltaTime * rotationThrust);
         }
 
+        myRigidbody.freezeRotation = false;
+    }
+
+    private void LateUpdate()
+    {
+        transform.localEulerAngles = new Vector3(0, 0, transform.localEulerAngles.z);
     }
 }
